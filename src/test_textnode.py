@@ -14,5 +14,9 @@ class TestTextNode(unittest.TestCase):
         node2 = TextNode("I'm another one text node", TextType.IMAGE, "![image](url/to/image.png)")
         self.assertNotEqual(node, node2)
 
+    def test_urlIsNone(self):
+        node = TextNode("I'm a text node", TextType.CODE)
+        self.assertIsNone(node.url)
+
 if __name__ == "__main__":
     unittest.main()
