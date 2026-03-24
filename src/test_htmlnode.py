@@ -13,12 +13,12 @@ class TestHtmlNode(unittest.TestCase):
         node2 = HTMLNode()
         self.assertNotEqual(node, node2)
 
-    def test_None_props(self):
+    def test_empty_node(self):
         node = HTMLNode()
         self.assertIsNone(node.tag)
         self.assertIsNone(node.value)
-        self.assertIsNone(node.children)
-        self.assertIsNone(node.props)
+        self.assertEqual(node.children, [])
+        self.assertEqual(node.props, {})
 
     def test_to_html(self):
         node = HTMLNode()
@@ -26,8 +26,7 @@ class TestHtmlNode(unittest.TestCase):
 
     def test_props_to_html(self):
         node = HTMLNode(None,None,None,{"target" : "_blank", "href" : "https://boot.dev"})
-        props_to_html = node.props_to_html()
-        self.assertEqual(props_to_html, 'target="_blank" href="https://boot.dev" ')
+        self.assertEqual(node.props_to_html(), 'target="_blank" href="https://boot.dev"')
 
 if __name__ == "__main__":
     unittest.main()
