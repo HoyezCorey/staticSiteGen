@@ -1,5 +1,5 @@
 from enum import Enum
-from leafnode import LeafNode
+import leafnode
 
 class TextType(Enum):
     TEXT = ""
@@ -16,19 +16,21 @@ class TextNode:
         self.url = URL
 
     def text_node_to_html_node(text_node):
-        match TextType:
+        match text_node.text_type:
             case TextType.TEXT:
-                return LeafNode(None, text_node.text)
+                return leafnode.LeafNode(None, text_node.text)
             case TextType.BOLD:
-                return LeafNode("b", text_node.text)
+                return leafnode.LeafNode("b", text_node.text)
             case TextType.ITALIC:
-                return LeafNode("i", text_node.text)
+                return leafnode.LeafNode("i", text_node.text)
             case TextType.CODE:
-                return LeafNode("code", text_node.text)
+                return leafnode.LeafNode("code", text_node.text)
             case TextType.LINK:
-                return LeafNode("a", text_node.text, {"href": text_node.url})
+                return leafnode.LeafNode("a", text_node.text, {"href": text_node.url})
             case TextType.IMAGE:
-                return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
+                return leafnode.LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
+            case _:
+                return leafnode.LeafNode(None, text_node.text)
 
     def __eq__(self, other):
         return (isinstance(other, TextNode)) and (self.text == other.text) and (self.text_type == other.text_type) and (self.url == other.url)
