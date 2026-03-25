@@ -18,7 +18,7 @@ class TestParentNode(unittest.TestCase):
             "<div><span><b>grandchild</b></span></div>",
         )
 
-    def test_to_html_with_more_grandchildren(self):
+    def test_to_html_with_multiple_grandchildrens(self):
         grandchild_node = LeafNode("b", "grandchild")
         grandchild_node_i = LeafNode("i", "grandchild_i")
         child_node = ParentNode("span", [grandchild_node, grandchild_node_i])
@@ -26,6 +26,17 @@ class TestParentNode(unittest.TestCase):
         self.assertEqual(
             parent_node.to_html(),
             "<div><span><b>grandchild</b><i>grandchild_i</i></span><span><b>grandchild</b><i>grandchild_i</i></span><b>grandchild</b></div>",
+        )
+
+    def test_to_html_with_multiple_parents_and_grandchilds(self):
+        grandchild_node = LeafNode("b", "grandchild")
+        grandchild_node_i = LeafNode("i", "grandchild_i")
+        child_node = ParentNode("span", [grandchild_node, grandchild_node_i])
+        parent_node = ParentNode("div", [child_node, child_node, grandchild_node])
+        grandparent_node = ParentNode("div", [parent_node])
+        self.assertEqual(
+            grandparent_node.to_html(),
+            "<div><div><span><b>grandchild</b><i>grandchild_i</i></span><span><b>grandchild</b><i>grandchild_i</i></span><b>grandchild</b></div></div>",
         )
 
 if __name__ == "__main__":
