@@ -34,3 +34,10 @@ class TestSplitDelimiter(unittest.TestCase):
         node = TextNode("I'm a textnode with an unknown delimiter", TextType.TEXT)
         with self.assertRaises(Exception): new_nodes = split_nodes_delimiter([node],"*_", TextType.TEXT)
         
+    def test_node_not_texttype_text(self):
+        node = TextNode("I'm a bold texttype textnode", TextType.BOLD)
+        new_nodes = split_nodes_delimiter([node],"`", TextType.TEXT)
+        self.assertEqual(new_nodes, [
+            TextNode("I'm a bold texttype textnode", TextType.BOLD)
+        ])
+        
