@@ -23,8 +23,30 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                 raise Exception("Invalid Markdown Syntax")
     return new_nodes
 
+def split_nodes_image(old_node):
+    new_nodes = []
+    images = []
+    for node in old_node:
+        text = node.text
+        images = extract_markdown_images(node.text)
+        print(images)
+        for image in images:
+            separator = "![" + image[0] + "](" + image[1] + ")"
+            split_index = text.find(separator)
+            new_nodes.append(TextNode(text[:split_index], TextType.TEXT))
+            new_nodes.append(TextNode(image[0], TextType.IMAGE, image[1]))
+            text = re.sub(r".*?!\[.*?\]\(https?:\/\/.*?\)", "", text, count=1)
+            print("\n" + text)
+        if text:
+            new_nodes.append(TextNode(text, TextType.TEXT))
+        print(new_nodes)
+    return new_nodes
+
+def split_nodes_link(old_node):
+    pass
+
 def extract_markdown_images(text):
-    alts = list(re.findall(r"!\[\w+\]", text))
+    alts = list(re.findall(r"!\[.*?\]", text))
     alts = list(map(lambda s: s.replace("![", "").replace("]", ""), alts))
     urls = list(re.findall(r"\(https?:\/\/.*?\)", text))
     urls = list(map(lambda s: s.replace("(", "").replace(")", ""), urls))
