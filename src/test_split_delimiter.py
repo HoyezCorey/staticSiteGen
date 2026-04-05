@@ -104,7 +104,7 @@ class TestSplitDelimiter(unittest.TestCase):
 
     def test_split_images(self):
         node = TextNode(
-            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png), hehe",
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png), and a link [to boot](http://www.boot.dev)!",
             TextType.TEXT,
         )
         new_nodes = split_nodes_image([node])
@@ -114,7 +114,24 @@ class TestSplitDelimiter(unittest.TestCase):
                 TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
                 TextNode(" and another ", TextType.TEXT),
                 TextNode("second image", TextType.IMAGE, "https://i.imgur.com/3elNhQu.png"),
-                TextNode(", hehe", TextType.TEXT),
+                TextNode(", and a link [to boot](http://www.boot.dev)!", TextType.TEXT),
+            ],
+            new_nodes,
+        )
+
+    def test_split_links(self):
+        node = TextNode(
+            "This is text with an [link to boot](https://www.boot.dev) and another [to youtube](http://www.youtube.com/@bootdev), and an image ![image](https://i.imgur.com/zjjcJKZ.png)",
+            TextType.TEXT,
+        )
+        new_nodes = split_nodes_link([node])
+        self.assertListEqual(
+            [
+                TextNode("This is text with an ", TextType.TEXT),
+                TextNode("link to boot", TextType.LINK, "https://www.boot.dev"),
+                TextNode(" and another ", TextType.TEXT),
+                TextNode("to youtube", TextType.LINK, "http://www.youtube.com/@bootdev"),
+                TextNode(", and an image ![image](https://i.imgur.com/zjjcJKZ.png)", TextType.TEXT),
             ],
             new_nodes,
         )
