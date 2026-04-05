@@ -28,7 +28,7 @@ def split_nodes_image(old_node):
     images = []
     for node in old_node:
         text = node.text
-        images = extract_markdown_images(node.text)
+        images = extract_markdown_images(text)
         for image in images:
             separator = "![" + image[0] + "](" + image[1] + ")"
             split_index = text.find(separator)
@@ -44,7 +44,7 @@ def split_nodes_link(old_node):
     links = []
     for node in old_node:
         text = node.text
-        links = extract_markdown_links(node.text)
+        links = extract_markdown_links(text)
         for link in links:
             separator = "[" + link[0] + "](" + link[1] + ")"
             split_index = text.find(separator)
