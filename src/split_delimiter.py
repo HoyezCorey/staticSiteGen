@@ -29,21 +29,31 @@ def split_nodes_image(old_node):
     for node in old_node:
         text = node.text
         images = extract_markdown_images(node.text)
-        print(images)
         for image in images:
             separator = "![" + image[0] + "](" + image[1] + ")"
             split_index = text.find(separator)
             new_nodes.append(TextNode(text[:split_index], TextType.TEXT))
             new_nodes.append(TextNode(image[0], TextType.IMAGE, image[1]))
             text = re.sub(r".*?!\[.*?\]\(https?:\/\/.*?\)", "", text, count=1)
-            print("\n" + text)
         if text:
             new_nodes.append(TextNode(text, TextType.TEXT))
-        print(new_nodes)
     return new_nodes
 
 def split_nodes_link(old_node):
-    pass
+    new_nodes = []
+    links = []
+    for node in old_node:
+        text = node.text
+        links = extract_markdown_links(node.text)
+        for link in links:
+            separator = "[" + link[0] + "](" + link[1] + ")"
+            split_index = text.find(separator)
+            new_nodes.append(TextNode(text[:split_index], TextType.TEXT))
+            new_nodes.append(TextNode(link[0], TextType.LINK, link[1]))
+            text = re.sub(r".*?(?<!!)\[.*?\]\(https?:\/\/.*?\)", "", text, count=1)
+        if text:
+            new_nodes.append(TextNode(text, TextType.TEXT))
+    return new_nodes
 
 def extract_markdown_images(text):
     alts = list(re.findall(r"!\[.*?\]", text))
