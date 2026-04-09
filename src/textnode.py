@@ -41,6 +41,19 @@ class TextNode:
         textnodes = split_delimiter.split_nodes_image(textnodes)
         textnodes = split_delimiter.split_nodes_link(textnodes)
         return textnodes
+    
+    def markdown_to_blocks(markdown):
+        blocks = markdown.split("\n")
+        blocks = [b.strip() for b in blocks]
+        i = 0
+        for b in blocks:
+            if i < len(blocks) - 1:
+                if b and blocks[i + 1]:
+                    blocks[i] = b + "\n" + blocks[i + 1]
+                    blocks.pop(i + 1)
+            i += 1
+        blocks = list(filter(None, blocks))
+        return blocks
 
     def __eq__(self, other):
         return (isinstance(other, TextNode)) and (self.text == other.text) and (self.text_type == other.text_type) and (self.url == other.url)
